@@ -56,5 +56,18 @@ app.use((req, res, next) => {
   const PORT = 5000;
   server.listen(PORT, "0.0.0.0", () => {
     log(`Server running on port ${PORT}`);
+
+    // Auto-pinger to prevent Render's free tier from sleeping (sleeps after 15 mins)
+    const renderUrl = process.env.RENDER_EXTERNAL_URL;
+    if (renderUrl) {
+      import("https").then((https) => {
+        setInterval(() => {
+          https.get(renderUrl).on("error", (err) => {
+            console.error("Ping error:", err.message);
+          });
+          log("Sent keep-alive ping to " + renderUrl);
+        }, 14 * 60 * 1000); // Ping every 14 minutes
+      });
+    }
   });
 })();
