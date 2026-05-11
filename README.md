@@ -56,6 +56,3 @@
 
 ---
 
-## 📜 License
-
-This project is open-sourced under the MIT License. Protect your academic integrity!
